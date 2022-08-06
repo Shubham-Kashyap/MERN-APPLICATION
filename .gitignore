@@ -1,0 +1,20 @@
+/node_modules
+/kunto-react-backend
+/kunto-react-frontend
+
+
+# client side hide items 
+
+/client/node_modules
+/client/src/config
+
+
+
+# server side hide items 
+/server/config
+/server/.gitignore
+
+
+
+# parent folder hide items 
+Readme.mo
