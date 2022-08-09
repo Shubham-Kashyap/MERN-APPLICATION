@@ -1,5 +1,13 @@
 import './chatRoom.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { io } from "socket.io-client";
+
+
+const URL = "http://localhost:4000";
+const socket = io(URL, {
+    // autoConnect: false,
+    transports: ['websocket']
+});
 
 const ChatRoom = (props) => {
     /**
@@ -14,6 +22,10 @@ const ChatRoom = (props) => {
         textMessage: "",
     });
     const [peopleList, setPeopleList] = useState({});
+    const [joined, setJoined] = useState(false);
+    const [isConnected, setIsConnected] = useState(socket.connected);
+    const [lastPong, setLastPong] = useState(null)
+
 
     /**
      * ----------------------------------------------------------------
@@ -29,9 +41,10 @@ const ChatRoom = (props) => {
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             console.log('++++++++ msg sent ++++++++');
-        } else {
-            console.log('+++++++ modifyign ++++++++');
         }
+        // else {
+        //     console.log('+++++++ modifyign ++++++++');
+        // }
     };
     const filterSearch = (e) => {
         const keyword = e.target.value;
@@ -51,14 +64,51 @@ const ChatRoom = (props) => {
 
     }
 
-    // console.log('current data to be sended ', chatMessage);
+    /**
+     * ----------------------------------------------------------------------
+     * chat functions
+     * ----------------------------------------------------------------------
+     */
+    const sendPing = () => {
+        socket.emit('ping');
+    };
+    /**
+     * ----------------------------------------------------------------------
+     * On screen load 
+     * ----------------------------------------------------------------------
+     */
+
+
+    useEffect(() => {
+        socket.on('connect', () => {
+            setIsConnected(true);
+            console.log('Client : socket is connected : ', socket.id)
+        });
+
+        socket.on('disconnect', () => {
+            setIsConnected(false);
+        });
+
+        socket.on('pong', () => {
+            setLastPong(new Date().toISOString());
+        });
+
+        return () => {
+            socket.off('connect');
+            socket.off('disconnect');
+            socket.off('pong');
+        };
+    }, []);
+
+
+
 
     return (
         <>
             <div id="content" className="content content-full-width">
                 <link href={"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"} rel="stylesheet" />
 
-                <div className="container-fluid" style={{ height: "100%" }}>
+                <div className="container-fluid" style={{ height: "100%", marginTop: "10px" }}>
                     <div className="row clearfix">
                         <div className="col-lg-12 mb-0" style={{ height: '100%' }}>
                             <div className="card chat-app">
@@ -69,7 +119,7 @@ const ChatRoom = (props) => {
                                         <div className="input-group-prepend">
                                             <span className="input-group-text"><i className="fa fa-search"></i></span>
                                         </div>
-                                        <input type="text" className="form-control" placeholder="Search..." onChange={ filterSearch }/>
+                                        <input type="text" className="form-control" placeholder="Search..." onChange={filterSearch} />
                                     </div>
                                     <ul className="list-unstyled chat-list mt-2 mb-0" id="people-listing">
                                         <li className="clearfix">
