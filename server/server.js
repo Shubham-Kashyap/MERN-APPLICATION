@@ -9,22 +9,13 @@ const { connectWithClientSocket } = require('./utils/chathandler')
 // config
 dotenv.config({ path: "server/config/config.env" });
 const PORT = process.env.PORT;
-/**
- * -------------------------------------------------------------
- * Chat essentials start
- * -------------------------------------------------------------
- */
-connectWithClientSocket();
-/**
- * -------------------------------------------------------------
- * Chat essentials end
- * -------------------------------------------------------------
- */
+
 
 
 async function boot() {
   try {
     await require('./models/connection').connect();
+    await connectWithClientSocket(); // chat essentials 
     await app.listen(PORT, () => {
       console.log(`Server listening on ${PORT}`);
     });

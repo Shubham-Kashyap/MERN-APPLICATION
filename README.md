@@ -16,16 +16,16 @@ Basic knowledge of **Node**, **React**, **Express**, **MongoDB**
 
 ## Environment variables
 
-you can use any library from **dotenv** and **config** to store and use your config variables to get the better understanding but make sure to have a `config,env` file in your `/server/config` folder
+you can use any library from **dotenv** and **config** to store and use your config variables to get the better understanding but make sure to have a `config.env` file in your `/server/config` folder
 
 **Essential variables**
 
-PORT=
-MONGO_URL
-MONGO_DBNAME
-JWT_AUTH_SECRET
+**PORT**
+**MONGO_URL**
+**MONGO_DBNAME**
+**JWT_AUTH_SECRET**
 
-_fill each fieled with your info respectively and you can declare and use additional variables and info as well as per your requirements_
+_fill each field with your info respectively and you can declare and use additional variables and info as well as per your requirements_
 
 ## Author
 

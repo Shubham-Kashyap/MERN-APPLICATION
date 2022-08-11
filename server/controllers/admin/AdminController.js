@@ -1,8 +1,10 @@
-const Response = require('../../utils/Response');
+const { ErrorResponse, SuccessResponse } = require('../../utils/Response');
 const user = require('../../models/user');
-class AdminController{
+const chatGroupManagement = require('../../models/group');
+let _request;
+class AdminController {
   // greetings
-  async greetings(req , res) {
+  async greetings(req, res) {
     // res.send({message:"this is web routes ---> great !"});
     let status_code = res.status(200);
     // res.send(Response.SuccessResponse(200, "routes are working"));
@@ -13,13 +15,40 @@ class AdminController{
    * @param {-------------------- all users --------------------} req 
    * @param {*} res 
    */
-  async allusers(req , res) {
+  async allusers(req, res, next) {
     try {
-      const data = await user.find({
-        role: 'user',
-      });
+      const data = await user.find({});
+      return SuccessResponse(res, "Profile data fetched successfully", data);
     } catch (error) {
-      return Response.ErrorResponse(res,error.messge)
+      return ErrorResponse(res, error.message);
+    }
+  }
+  /**
+   * 
+   * @param {------------------- add users to a group or individual ---------------} 
+   * @param {*} req 
+   */
+  async createChatGroupForUsers(req, res) {
+    try {
+      _request = await req.body;
+      const result = await chatGroupManagement.create({
+        users: _request.user,
+        mute_status: _request.country_code,
+
+      });
+      return SuccessResponse(res, "data added successfully,", result);
+    } catch (error) {
+      return ErrorResponse(res, error.message)
+    }
+  }
+  async fetchChatGroupForUsers(req, res) {
+    try {
+      _request = await req.body;
+
+      const result = await chatGroupManagement.find({});
+      return SuccessResponse(res, "data fetched successfully,", result);
+    } catch (error) {
+      return ErrorResponse(res, error.message)
     }
   }
 }

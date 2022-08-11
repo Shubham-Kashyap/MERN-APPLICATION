@@ -46,6 +46,13 @@ const validate = (method) => {
                 // check('user_id', "user_id field is required").exists().notEmpty().withMessage('User id field is required'),
             ];
         }
+        case "add-user-to-group": {
+            console.log('- add to chat group')
+            return [
+                check('user').trim()
+                    .not().isEmpty().withMessage("user cant be empty").bail()
+            ]
+        }
         default: {
             return []
         }
@@ -131,7 +138,7 @@ const generateUsername = async () => {
         'Legacy', 'Sharp', 'Dead', 'Mew', 'Chuckle', 'Bubba', 'Bubble', 'Sandwich', 'Smasher', 'Extreme', 'Multi', 'Universe', 'Ultimate', 'Death', 'Ready', 'Monkey', 'Elevator', 'Wrench', 'Grease', 'Head', 'Theme', 'Grand', 'Cool', 'Kid', 'Boy', 'Girl', 'Vortex', 'Paradox'
     ];
     let finalName = "";
-     finalName = nameList[Math.floor(Math.random() * nameList.length)];
+    finalName = nameList[Math.floor(Math.random() * nameList.length)];
     finalName += nameList[Math.floor(Math.random() * nameList.length)];
     if (Math.random() > 0.5) {
         finalName += nameList[Math.floor(Math.random() * nameList.length)];

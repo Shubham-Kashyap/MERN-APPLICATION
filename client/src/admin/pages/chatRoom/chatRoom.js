@@ -1,7 +1,7 @@
 import './chatRoom.css';
 import { useState, useEffect } from 'react';
-import { io } from "socket.io-client";
-
+import { io, Socket } from "socket.io-client";
+import { post_api_call, ApiCall } from "../../../helpers/api_calls";
 
 const URL = "http://localhost:4000";
 const socket = io(URL, {
@@ -21,11 +21,12 @@ const ChatRoom = (props) => {
         messageMIMEType: "", // for text , gif , emoji , file etc
         textMessage: "",
     });
-    const [peopleList, setPeopleList] = useState({});
+    const [tab, setTab] = useState("");
+    const [peopleList, setPeopleList] = useState([]);
     const [joined, setJoined] = useState(false);
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [lastPong, setLastPong] = useState(null)
-
+    const [loggedInUserData, setLoggedInUserData] = useState({});
 
     /**
      * ----------------------------------------------------------------
@@ -38,14 +39,36 @@ const ChatRoom = (props) => {
         });
         console.log('Typing .....', chatMessage.textMessage)
     }
+    async function getLoggedInUser() {
+        const res = await ApiCall('/api/v1/fetch-profile');
+        setLoggedInUserData({
+            name: res.response.name,
+            username: res.response.username,
+            avatar: res.response.avatar
+        });
+    }
+    /**
+    * ----------------------------------------------------------------
+    * send message click handler
+    * ----------------------------------------------------------------
+    */
     const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
+        // console.log('clicked')
+        // console.log(event.target.getAttribute('data-id'))
+
+        if (event.key === 'Enter' || event.target.getAttribute('data-id') === 'send-button') {
             console.log('++++++++ msg sent ++++++++');
+            const uniqueEvent = `${loggedInUserData.username}`;
+            Socket.emit(``)
+            document.getElementById("text-message").value = "";
         }
-        // else {
-        //     console.log('+++++++ modifyign ++++++++');
-        // }
+
     };
+    /**
+    * ----------------------------------------------------------------
+    * people list search filter
+    * ----------------------------------------------------------------
+    */
     const filterSearch = (e) => {
         const keyword = e.target.value;
         if (keyword !== '') {
@@ -53,7 +76,7 @@ const ChatRoom = (props) => {
                 return user.name.toLowerCase().startsWith(keyword.toLowerCase());
                 // Use the toLowerCase() method to make it case-insensitive
             });
-            setPeopleList(...peopleList, results);
+            // setPeopleList(...peopleList, results);
         }
         // else {
         //     setPeopleList();
@@ -62,6 +85,17 @@ const ChatRoom = (props) => {
 
         setPeopleList(...peopleList);
 
+    }
+    /**
+     * ----------------------------------------------------------------
+     * Load people
+     * ----------------------------------------------------------------
+     */
+    const getPeopleList = async () => {
+        const data = await post_api_call('/admin/v1/fetch-user-list', {});
+        console.log('++++ people list ++++++++ ', data);
+
+        setPeopleList(data.response);
     }
 
     /**
@@ -79,7 +113,9 @@ const ChatRoom = (props) => {
      */
 
 
-    useEffect(() => {
+    useEffect(async () => {
+        getPeopleList();
+        getLoggedInUser();
         socket.on('connect', () => {
             setIsConnected(true);
             console.log('Client : socket is connected : ', socket.id)
@@ -122,7 +158,7 @@ const ChatRoom = (props) => {
                                         <input type="text" className="form-control" placeholder="Search..." onChange={filterSearch} />
                                     </div>
                                     <ul className="list-unstyled chat-list mt-2 mb-0" id="people-listing">
-                                        <li className="clearfix">
+                                        {/* <li className="clearfix">
                                             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" />
                                             <div className="about">
                                                 <div className="name">Vincent Porter</div>
@@ -136,76 +172,24 @@ const ChatRoom = (props) => {
                                                 <div className="status"> <i className="fa fa-circle online"></i> online </div>
                                             </div>
                                         </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Mike Thomas</div>
-                                                <div className="status"> <i className="fa fa-circle online"></i> online </div>
-                                            </div>
-                                        </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Christian Kelly</div>
-                                                <div className="status"> <i className="fa fa-circle offline"></i> left 10 hours ago </div>
-                                            </div>
-                                        </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Monica Ward</div>
-                                                <div className="status"> <i className="fa fa-circle online"></i> online </div>
-                                            </div>
-                                        </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Dean Henry</div>
-                                                <div className="status"> <i className="fa fa-circle offline"></i> offline since Oct 28 </div>
-                                            </div>
-                                        </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Dean Henry</div>
-                                                <div className="status"> <i className="fa fa-circle offline"></i> offline since Oct 28 </div>
-                                            </div>
-                                        </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Dean Henry</div>
-                                                <div className="status"> <i className="fa fa-circle offline"></i> offline since Oct 28 </div>
-                                            </div>
-                                        </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Dean Henry</div>
-                                                <div className="status"> <i className="fa fa-circle offline"></i> offline since Oct 28 </div>
-                                            </div>
-                                        </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Dean Henry</div>
-                                                <div className="status"> <i className="fa fa-circle offline"></i> offline since Oct 28 </div>
-                                            </div>
-                                        </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Dean Henry</div>
-                                                <div className="status"> <i className="fa fa-circle offline"></i> offline since Oct 28 </div>
-                                            </div>
-                                        </li>
-                                        <li className="clearfix">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar" />
-                                            <div className="about">
-                                                <div className="name">Dean Henry</div>
-                                                <div className="status"> <i className="fa fa-circle offline"></i> offline since Oct 28 </div>
-                                            </div>
-                                        </li>
+                                         */}
+
+                                        {
+                                            peopleList && peopleList.map((item, index) => {
+
+                                                return (
+                                                    <li key={item.id} className="clearfix">
+                                                        <img src={item.avatar ? item.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
+                                                        <div className="about">
+                                                            <div className="name">{item.name}</div>
+                                                            <div className="status"> <i className="fa fa-circle offline"></i> offline since Oct 28 </div>
+                                                        </div>
+                                                    </li>
+                                                )
+
+                                            })
+                                        }
+
                                     </ul>
                                 </div>
                                 {/* people list end  */}
@@ -238,7 +222,7 @@ const ChatRoom = (props) => {
 
 
                                             {/* sender message start */}
-                                            <li className="clearfix">
+                                            <li key={'dahvdshavd'} className="clearfix">
                                                 <div className="message-data text-right">
                                                     <span className="message-data-time">10:10 AM, Today</span>
                                                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
@@ -250,13 +234,8 @@ const ChatRoom = (props) => {
 
 
                                             {/* receiver message start   */}
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:12 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Are we meeting today?</div>
-                                            </li>
-                                            <li className="clearfix">
+
+                                            <li key={'asdhsdvhadhbdj'} className="clearfix">
                                                 <div className="message-data">
                                                     <span className="message-data-time">10:15 AM, Today</span>
                                                 </div>
@@ -265,113 +244,24 @@ const ChatRoom = (props) => {
                                             {/* receiver message end   */}
 
 
-                                            {/* receiver message start   */}
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:12 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Are we meeting today?</div>
-                                            </li>
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:15 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Project has been already finished and I have results to show you.</div>
-                                            </li>
-                                            {/* receiver message end   */}
-                                            {/* receiver message start   */}
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:12 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Are we meeting today?</div>
-                                            </li>
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:15 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Project has been already finished and I have results to show you.</div>
-                                            </li>
-                                            {/* receiver message end   */}
-                                            {/* receiver message start   */}
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:12 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Are we meeting today?</div>
-                                            </li>
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:15 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Project has been already finished and I have results to show you.</div>
-                                            </li>
-                                            {/* receiver message end   */}
-                                            {/* receiver message start   */}
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:12 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Are we meeting today?</div>
-                                            </li>
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:15 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Project has been already finished and I have results to show you.</div>
-                                            </li>
-                                            {/* receiver message end   */}
-                                            {/* receiver message start   */}
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:12 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Are we meeting today?</div>
-                                            </li>
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:15 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Project has been already finished and I have results to show you.</div>
-                                            </li>
-                                            {/* receiver message end   */}
-                                            {/* receiver message start   */}
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:12 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Are we meeting today?</div>
-                                            </li>
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:15 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Project has been already finished and I have results to show you.</div>
-                                            </li>
-                                            {/* receiver message end   */}
-                                            {/* receiver message start   */}
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:12 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Are we meeting today?</div>
-                                            </li>
-                                            <li className="clearfix">
-                                                <div className="message-data">
-                                                    <span className="message-data-time">10:15 AM, Today</span>
-                                                </div>
-                                                <div className="message my-message">Project has been already finished and I have results to show you.</div>
-                                            </li>
-                                            {/* receiver message end   */}
+
+
+
+
+
+
+
 
                                         </ul>
                                     </div>
                                     <div className="chat-message clearfix">
                                         <div className="input-group mb-0">
-                                            <div className="input-group-prepend">
-                                                <span className="input-group-text"><i className="fa fa-send"></i></span>
-                                            </div>
-                                            <textarea type="text" className="form-control" placeholder="Enter text here..." onChange={(e) => {
+                                            <a className="input-group-prepend" onClick={handleKeyDown}>
+
+                                                <span className="input-group-text" data-id="send-button" ><i className="fa fa-send"></i></span>
+
+                                            </a>
+                                            <textarea type="text" className="form-control" id="text-message" data-id="send-text" placeholder="Enter text here..." onChange={(e) => {
                                                 typingMessage(e)
                                             }} onKeyDown={handleKeyDown}></textarea>
                                         </div>

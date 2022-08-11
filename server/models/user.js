@@ -36,6 +36,10 @@ const user_schema = new mongoose.Schema({
         type: String,
         default: null
     },
+    avatar: {
+        type: String,
+        default: "https://bootdey.com/img/Content/avatar/avatar5.png" // default avatar image
+    },
     device_type: {
         type: String,
         default: null
@@ -44,8 +48,8 @@ const user_schema = new mongoose.Schema({
         type: String,
         default: null
     },
-    
-},   { timestamps: true }
+
+}, { timestamps: true }
 );
 
 const User = mongoose.model('users', user_schema);
