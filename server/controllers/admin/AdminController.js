@@ -51,6 +51,20 @@ class AdminController {
       return ErrorResponse(res, error.message)
     }
   }
+  async updateChatGroupForUsers(req, res) {
+    try {
+      _request = await req.body;
+
+      const result = await chatGroupManagement.update({
+        _id: _request.group_id
+      }, {
+        name: _request.name
+      });
+      return SuccessResponse(res, "data updated successfully,");
+    } catch (error) {
+      return ErrorResponse(res, error.message)
+    }
+  }
 }
 
 // class object

@@ -38,7 +38,7 @@ const user_schema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default: "https://bootdey.com/img/Content/avatar/avatar5.png" // default avatar image
+        default: "https://bootdey.com/img/Content/avatar/avatar7.png" // default avatar image
     },
     device_type: {
         type: String,

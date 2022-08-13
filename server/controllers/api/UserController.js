@@ -5,7 +5,7 @@ const { check, validationResult } = require("express-validator");
 const { generateUsername } = require('../../helpers/validate');
 const { encryptHash, compareHash } = require('../../services/crypto');
 const { generateToken, checkToken } = require('../../services/auth');
-const { db } = require('../../models/user');
+const { db, findOne } = require('../../models/user');
 let _request = '';
 
 class UserController {
@@ -84,8 +84,8 @@ class UserController {
           foreignField: "user_id",
           as: "token"
         },
-        
-      },{
+
+      }, {
         $unwind: '$token',
       },]);
       SuccessResponse(res, "Data fetched successfully", result[0]);
@@ -100,8 +100,22 @@ class UserController {
    */
   async fetchProfile(req, res, next) {
     try {
-      
+
       return SuccessResponse(res, "Profile data fetched successfully", req.user);
+    } catch (error) {
+      return ErrorResponse(res, error.message);
+    }
+  }
+  async updateProfileByUserId(req, res, next) {
+    try {
+      const _request = req.body;
+      const oldData = await user.findOne({ id: _request.user_id });
+      await user.updateOne({
+        _id: _request.user_id,
+      }, {
+        name: _request.name ? _request.name : oldData.name,
+      })
+      return SuccessResponse(res, "profile updated successfully");
     } catch (error) {
       return ErrorResponse(res, error.message);
     }

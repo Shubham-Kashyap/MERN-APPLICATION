@@ -19,11 +19,11 @@ app.use(express.urlencoded({
   extended: true
 }));
 
- 
+
 app.use(cors())
 
 
-app.use('/', (req, res, next) =>{
+app.use('/', (req, res, next) => {
   req.requestTime = Date.now();
   let fullUrl = req.headers.host + req.originalUrl;
   console.log(chalk.yellow.bold("Request : " + fullUrl));
@@ -34,8 +34,8 @@ app.use('/', (req, res, next) =>{
 
 // route imports
 /* -- route imports start -- */
-app.use('/api/v1',require('./routes/api'));
-app.use('/web/v1',require('./routes/web'));
+app.use('/api/v1', require('./routes/api'));
+app.use('/web/v1', require('./routes/web'));
 app.use('/admin/v1', require('./routes/admin'));
 /* -- route imports end -- */
 

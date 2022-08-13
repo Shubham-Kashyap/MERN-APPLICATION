@@ -6,7 +6,7 @@ let api_end_point = config.api_endpoint;
 const post_api_call = async (paramEndPoint, requestData) => {
     try {
 
-        console.log(requestData)
+        // console.log(requestData)
         let result = await fetch(`${api_end_point}${paramEndPoint}`, {
             method: 'POST',
             headers: {

@@ -41,10 +41,10 @@ const ChatRoom = (props) => {
     }
     async function getChatGroups() {
         const res = await post_api_call('/admin/v1/fetch-user-to-group', {});
-        // if (res.response.length > 0) {
-        //     setTab(res.response[0]);
+        if (res.response.length > 0) {
+            setTab(res.response[0]);
 
-        // }
+        }
         setPeopleGroup(res.response);
     }
     /**
@@ -55,13 +55,17 @@ const ChatRoom = (props) => {
     const handleKeyDown = (event) => {
 
 
-        if (event.target.getAttribute('data-id') === 'send-button') {
-            // console.log('++++++++ msg sent ++++++++');
+        if (event.key === 'Enter' || event.target.getAttribute('data-id') === 'send-button') {
+            console.log('++++++++ msg sent ++++++++');
             const uniqueEvent = `${loggedInUserData.username}`;
             socket.emit(`message`, {
-                user: loggedInUserData._id,
-                msg: document.getElementById('text-message').value,
-                socketId: socket.id
+                sender: loggedInUserData._id,
+                senderName: loggedInUserData.name,
+
+                senderRole: loggedInUserData.role,
+                receiver: tab._id,
+                receiverType: tab.role ? 'individual' : 'group',
+                message: document.getElementById("text-message").value
             });
             // socket.emit('message', { message, id });
             document.getElementById("text-message").value = "";
@@ -141,8 +145,6 @@ const ChatRoom = (props) => {
             socket.off('disconnect');
             socket.off('pong');
         };
-
-
     }, []);
 
 
@@ -167,7 +169,7 @@ const ChatRoom = (props) => {
                                         <input type="text" className="form-control" placeholder="Search..." onChange={filterSearch} />
                                     </div>
                                     {/* groups start */}
-                                    {/* <ul className="list-unstyled chat-list mt-2 mb-0" id="people-listing">
+                                    <ul className="list-unstyled chat-list mt-2 mb-0" id="people-listing">
                                         Groups
                                         {
                                             peopleGroup && peopleGroup.map((item, index) => {
@@ -183,7 +185,7 @@ const ChatRoom = (props) => {
                                             })
                                         }
 
-                                    </ul> */}
+                                    </ul>
                                     {/* groups end  */}
 
                                     {/* people list start */}
@@ -209,7 +211,7 @@ const ChatRoom = (props) => {
                                             peopleList && peopleList.map((item, index) => {
 
                                                 return (
-                                                    <li key={item._id} className={item._id === tab._id ? "clearfix active " : "clearfix"} onClick={(e) => setTab(item) && io.emit('joined', loggedInUserData)}>
+                                                    <li key={item._id} className={item._id === tab._id ? "clearfix active " : "clearfix"} onClick={(e) => setTab(item)}>
                                                         <img src={item.avatar ? item.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
                                                         <div className="about">
                                                             <div className="name">{item.name}</div>

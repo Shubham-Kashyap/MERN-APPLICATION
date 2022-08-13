@@ -20,10 +20,10 @@ you can use any library from **dotenv** and **config** to store and use your con
 
 **Essential variables**
 
-**PORT**
-**MONGO_URL**
-**MONGO_DBNAME**
-**JWT_AUTH_SECRET**
+**PORT**=
+**MONGO_URL**=
+**MONGO_DBNAME**=
+**JWT_AUTH_SECRET**=
 
 _fill each field with your info respectively and you can declare and use additional variables and info as well as per your requirements_
 

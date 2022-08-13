@@ -53,6 +53,19 @@ const validate = (method) => {
                     .not().isEmpty().withMessage("user cant be empty").bail()
             ]
         }
+        case "update-user-by-id": {
+            console.log('- update user by id');
+            return [
+                check('user_id').trim()
+                    .not().isEmpty().withMessage('user id cant be empty').bail()
+                    .custom(async (value) => {
+                        const data = await user.findOne({ _id: value });
+                        if (!data) {
+                            return Promise.reject('user not exists');
+                        }
+                    }).bail(),
+            ]
+        }
         default: {
             return []
         }
