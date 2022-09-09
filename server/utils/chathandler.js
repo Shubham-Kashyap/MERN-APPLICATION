@@ -13,10 +13,7 @@ const connectWithClientSocket = () => {
     try {
         io.on("connection", (socket) => {
             console.log(chalk.cyan.bold('Server : socket is connected : ', socket.id));
-            // socket.on('message', ({ message, id }) => {
-            //     io.emit('sendMessage', { user: users[id], message, id });
-            // })
-
+            message(socket);
         });
     } catch (err) {
         console.log(chalk.red.bold('+++++ SOCKET ERROR +++++ '), err.message);
@@ -27,9 +24,10 @@ const sendWelcomeMessage = (socket) => {
 
 }
 const message = (socket) => {
+    //** when message event it emitted by the client */
     socket.on('message', (data) => {
         console.log(' message received ', data);
-        io.emit('sendMessage', 'receiver fuck off')
+        io.emit(`msg-${data.user}`, data.msg)
     });
 }
 

@@ -18,7 +18,7 @@ class AdminController {
   async allusers(req, res, next) {
     try {
       const data = await user.find({});
-      return SuccessResponse(res, "Profile data fetched successfully", data);
+      return SuccessResponse(res, "All users fetched successfully", data);
     } catch (error) {
       return ErrorResponse(res, error.message);
     }
@@ -32,9 +32,12 @@ class AdminController {
     try {
       _request = await req.body;
       const result = await chatGroupManagement.create({
+        name: _request.name,
         users: _request.user,
+        owner: _request.owner,
         mute_status: _request.country_code,
-
+        is_group_chat: _request.is_group_chat,
+        avatar: _request.avatar,
       });
       return SuccessResponse(res, "data added successfully,", result);
     } catch (error) {

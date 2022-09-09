@@ -5,9 +5,9 @@ import Login from './admin/pages/login';
 import AdminApp from './admin/AdminApp';
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
- 
+
   return (
     <>
       <AdminApp />

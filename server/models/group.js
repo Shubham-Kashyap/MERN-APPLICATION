@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const chatGroupManagementSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        default: null
+    },
     users: [{
         type: mongoose.Schema.Types.ObjectId,
         // ref: 'users'
@@ -9,8 +13,9 @@ const chatGroupManagementSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         // ref: users
     },
-    name: {
+    is_group_chat: {
         type: String,
+        enum: [true, false],
         default: null
     },
     mute_status: {

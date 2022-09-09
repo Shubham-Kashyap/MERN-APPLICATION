@@ -29,7 +29,7 @@ admin.all("*", (req, res, next) => {
 
         admin.post(`/fetch-user-list`, authenticateToken, AdminController.allusers);
         admin.post(`/add-user-to-group`, authenticateToken, AdminController.createChatGroupForUsers);
-        admin.post(`/fetch-user-to-group`, authenticateToken, AdminController.fetchChatGroupForUsers);
+        admin.post(`/fetch-chat-users`, authenticateToken, AdminController.fetchChatGroupForUsers);
         admin.post(`/update-user-to-group`, authenticateToken, AdminController.updateChatGroupForUsers);
 
         next();

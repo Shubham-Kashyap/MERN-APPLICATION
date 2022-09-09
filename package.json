@@ -2,7 +2,7 @@
   "name": "mern-application",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "nodemon server.js",
   "scripts": {
     "start": "npm run dev ",
     "client": "npm start --prefix client",
