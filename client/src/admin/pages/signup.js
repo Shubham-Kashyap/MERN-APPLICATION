@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { post_api_call } from '../../helpers/api_calls';
 import { useNavigate, Outlet, Navigate } from "react-router-dom";
 
-const Login = () => {
+const Signup = () => {
     /**
      * ----------------------------------------------------------------
      * State valiables 
@@ -156,4 +156,4 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default Signup;

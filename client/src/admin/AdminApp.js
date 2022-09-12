@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
 import Login from "./pages/login";
+import Signup from "./pages/signup";
 import Home from "./pages/home";
 import Navbar from "./components/layouts/navbar";
 import Sidebar from "./components/layouts/sidebar";
@@ -35,7 +36,7 @@ const AdminApp = () => {
     } else {
       console.log('ohh fuck none was logged in ');
     }
-   
+
   }
 
   useEffect(() => {
@@ -47,10 +48,11 @@ const AdminApp = () => {
       <Routes>
 
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
         <Route path="/" element={<Login />} />
         {/* <Route path="*" element={isAuthenticated ? <Outlet /> : <Navigate to="/login" />} /> */}
         {/* <Route  element={isAuthenticated ? <Outlet /> : <Navigate to="/login" />}> */}
-        <Route  element={ <ProtectRoutes />}>
+        <Route element={<ProtectRoutes />}>
 
           <Route path="/home" element={<Home />} />
           <Route path="/dashboard" element={<Home />} />
@@ -58,7 +60,7 @@ const AdminApp = () => {
           <Route path="/chat-section" element={<ChatRoom />} />
         </Route>
 
-        <Route path='/*' element={ <$404/> }></Route>
+        <Route path='/*' element={<$404 />}></Route>
 
       </Routes>
     </BrowserRouter>

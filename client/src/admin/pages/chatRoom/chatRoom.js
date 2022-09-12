@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { io, Socket } from "socket.io-client";
 import { post_api_call, ApiCall } from "../../../helpers/api_calls";
 import PeopleList from './components/peoplelist';
-import ChatWindow from './components/chatwindow';
+import ChatHistory from './components/chatHistory';
 import ChatHeader from './components/chatHeader';
 
 const URL = "http://localhost:4000";
@@ -46,14 +46,13 @@ const ChatRoom = (props) => {
         const res = await post_api_call('/admin/v1/fetch-chat-users', {});
         setPeopleGroup(res.response);
     }
+    console.log(peopleList);
     /**
     * ----------------------------------------------------------------
     * send message click handler
     * ----------------------------------------------------------------
     */
     const handleKeyDown = (event) => {
-
-
         if (event.target.getAttribute('data-id') === 'send-button') {
             // console.log('++++++++ msg sent ++++++++');
             const uniqueEvent = `${loggedInUserData.username}`;
@@ -121,7 +120,7 @@ const ChatRoom = (props) => {
         return <PeopleList />;
     }
     const _chatHistory = () => {
-        return <ChatWindow />;
+        return <ChatHistory />;
     }
     /** SCREEN COMPONENTS END */
 

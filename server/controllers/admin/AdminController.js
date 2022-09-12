@@ -48,7 +48,13 @@ class AdminController {
     try {
       _request = await req.body;
 
-      const result = await chatGroupManagement.find({});
+      const result = await chatGroupManagement.find({
+        users: {
+          $in: [_request.user]
+        }
+      }).populate('users', '-password')
+      // .populate('latestMessage');
+      console.log(req.user)
       return SuccessResponse(res, "data fetched successfully,", result);
     } catch (error) {
       return ErrorResponse(res, error.message)

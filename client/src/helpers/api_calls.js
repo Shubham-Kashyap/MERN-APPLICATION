@@ -52,6 +52,7 @@ const get_api_call = async (paramEndPoint, requestData) => {
             headers: {
                 Accept: "application/x-www-form-urlencoded",
                 "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("authtoken"),
             },
             body: JSON.stringify(requestData),
         });

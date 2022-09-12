@@ -16,7 +16,7 @@ const chatGroupManagementSchema = new mongoose.Schema({
     is_group_chat: {
         type: String,
         enum: [true, false],
-        default: null
+        default: false
     },
     mute_status: {
         type: String,

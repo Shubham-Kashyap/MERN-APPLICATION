@@ -16,8 +16,8 @@ class auth {
                 default: {
                     var decoded = await checkToken(token.split(' ').pop());
                     // req.user = await user.findOne({ _id: decoded.id });
-                    req.user = await user.findOne({ _id: decoded.id});
-                    
+                    req.user = await user.findOne({ _id: decoded.id });
+                    // console.log(req.user)
                 }
             }
             next();
