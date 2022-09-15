@@ -10,6 +10,10 @@ const chatSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
+        // content_type: {
+        //     type: String,
+        //     Enum: ['link', 'message', 'all',]
+        // },
         chat_group: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Chat',
