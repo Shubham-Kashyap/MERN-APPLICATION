@@ -55,7 +55,7 @@ const AdminApp = () => {
         <Route element={<ProtectRoutes />}>
 
           <Route path="/home" element={<Home />} />
-          <Route path="/dashboard" element={<Home />} />
+          <Route path="/dashboard" element={<ChatRoom />} />
           <Route path="/profile-settings" element={<Profile />} />
           <Route path="/chat-section" element={<ChatRoom />} />
         </Route>

@@ -1,46 +1,14 @@
 import React from 'react';
 import WelcomeMessage from "./welcomeMessage";
+import { post_api_call } from "../../../../helpers/api_calls";
 import { tabData } from "./peoplelist";
-
-const Chats = () => {
-    return (
-        <>
-            <div className="chat-history" id="msg-history">
-                <ul className="m-b-0">
-
-
-                    {/* sender message start */}
-                    <li key={'dahvdshavddasa'} className="clearfix">
-                        <div className="message-data text-right">
-                            {/* <span className="message-data-time">10:10 AM, Today</span> */}
-                            {/* <img src="https://bootdey.com/img/Content/avatar/avatar7.png" style={{ marginRight: '5px' }} alt="avatar" /> */}
-                            <div className="message other-message"> Hi Aiden, how are you? How is the project coming along? dasdas sd sadasdsa dsa dsa dsa d sadsa dsa dsa d  </div>
-
-                        </div>
-                    </li>
-                    {/* sender message end  */}
+import UserMessage from './userMessage';
 
 
 
-                    {/* receiver message start   */}
 
-                    <li key={'asdhsdvhadhbdj'} className="clearfix">
-                        <div className="message-data">
-                            <span className="message-data-time">10:15 AM, Today</span>
-                        </div>
-                        <div className="message my-message">Project has been already finished and I have results to show you.</div>
-                    </li>
-                    {/* receiver message end   */}
-
-
-                </ul>
-            </div>
-
-        </>
-    );
-}
-const _returnChatHistory = () => {
-    return <Chats />
+const _returnChatHistory = (messages) => {
+    return <UserMessage messages={messages} />
 }
 const _returnWelcomeMessage = () => {
     return <WelcomeMessage />
@@ -48,12 +16,22 @@ const _returnWelcomeMessage = () => {
 
 
 const ChatHistory = (props) => {
+    const [messageHistory, setMessageHistory] = React.useState([]);
 
+    async function getMessageHistory() {
+        const res = await post_api_call('/admin/v1/get-chat-history', {});
+        setMessageHistory(res.response);
+    }
+    React.useEffect(() => {
+        getMessageHistory()
+
+    }, []);
     return (
         <>
-
             {
-                tabData.length >= 1 ? _returnChatHistory() : _returnWelcomeMessage()
+                // tabData.length >= 1 ? _returnChatHistory() : _returnWelcomeMessage()
+                (messageHistory && messageHistory.length > 1 ? _returnChatHistory(messageHistory) : _returnWelcomeMessage())
+
             }
         </>
 

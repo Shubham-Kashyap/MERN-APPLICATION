@@ -4,8 +4,9 @@ const chalk = require('chalk');
 const { Server } = require("socket.io");
 const io = new Server(4000, {
     /* options */
+    pingTimeout: 60000,
     cors: {
-        origin: ["http://localhost:3000", "http://localhost:5000"],
+        origin: ["http://localhost:3000"],
         autoConnect: false, reconnection: false
     }
 });

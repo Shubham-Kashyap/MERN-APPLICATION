@@ -12,16 +12,16 @@ const Sidebar = () => {
 	const navigate = useNavigate();
 	const [userData, setUserData] = useState({
 		username: "",
-		name : ""
+		name: ""
 	});
-	
+
 	const [tab, setTab] = useState('');
 	function logout(e) {
 		e.preventDefault();
 		localStorage.removeItem('authtoken', "")
 		navigate('/login');
 	}
-	
+
 	/**
 	 * ----------------------------------------------------------------
 	 * custom functions
@@ -31,8 +31,8 @@ const Sidebar = () => {
 		const res = await ApiCall('/api/v1/fetch-profile');
 		setUserData({
 			name: res.response.name,
-			username : res.response.username,
-			image : ""
+			username: res.response.username,
+			image: ""
 		});
 	}
 	/**
@@ -45,7 +45,7 @@ const Sidebar = () => {
 		getLoggedInUser();
 		setTab(window.location.pathname);
 	}, [
-		
+
 	])
 	return (
 		<>
@@ -68,7 +68,7 @@ const Sidebar = () => {
 						</li>
 						<li>
 							<ul className="nav nav-profile">
-								<li onClick={() => setTab('/profile-settings')} className={ tab === "/profile-settings" ? "active" : ""}>
+								<li onClick={() => setTab('/profile-settings')} className={tab === "/profile-settings" ? "active" : ""}>
 									<a href="/profile-settings">
 										<i className="fa fa-cog"></i> Settings</a>
 								</li>
@@ -78,7 +78,7 @@ const Sidebar = () => {
 						</li>
 					</ul>
 					<ul className="nav"><li className="nav-header">Navigation</li>
-						<li onClick={ () => setTab('/dashboard') } className={ tab === '/dashboard' ? "active" : '' }>
+						<li onClick={() => setTab('/dashboard')} className={tab === '/dashboard' ? "active" : ''}>
 							<a href="/dashboard">
 								<i className="ion-ios-pulse"></i>
 								<span>Home</span>
@@ -115,7 +115,7 @@ const Sidebar = () => {
 							<li><a href="#">Menu 1.3</a></li>
 						</ul>
 					</li> */}
-						<li onClick={ () => setTab('/profile-settings') } className={tab === '/profile-settings' ? "has-sub active" : 'has-sub'}>
+						<li onClick={() => setTab('/profile-settings')} className={tab === '/profile-settings' ? "has-sub active" : 'has-sub'}>
 							<a href="/profile-settings">
 								<b className="caret"></b>
 								<i className="ion-ios-cog"></i>

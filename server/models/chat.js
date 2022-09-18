@@ -16,7 +16,7 @@ const chatSchema = new mongoose.Schema(
         // },
         chat_group: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Chat',
+            ref: 'Group',
         },
     },
     {

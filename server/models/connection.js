@@ -9,12 +9,12 @@ const connect = async () => {
             maxPoolSize: 10, // Maintain up to 10 socket connections
             serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
             socketTimeoutMS: 60000, // Close sockets after 60 seconds of inactivity,
-            dbName : dbName, // Specifies which database to connect to and overrides any database specified in the connection string.
+            dbName: dbName, // Specifies which database to connect to and overrides any database specified in the connection string.
         });
 
         console.log(chalk.yellow.bold(`db connected - ${dbURI}`));
     } catch (error) {
-        console.log(error.message);
+        console.log(chalk.cyanBright.bold(error.message));
         process.exit(0);
     }
 }

@@ -1,5 +1,5 @@
 const { ErrorResponse, SuccessResponse } = require('../../utils/Response');
-
+const { chat } = require('../../exports/library');
 
 class ChatController {
 
@@ -8,9 +8,10 @@ class ChatController {
      * Get Chat hostory
      * ----------------------------------------------------------------
      */
-     getChatHostory = (req,res) => {
+    getChatHostory = async (req, res) => {
         try {
-            return SuccessResponse(res, 'data fetched successfully', []);
+            const data = await chat.find({});
+            return SuccessResponse(res, 'data fetched successfully', data);
         } catch (error) {
             return ErrorResponse(res, error.message);
         }
@@ -20,7 +21,7 @@ class ChatController {
      * Send Message to friends
      * ----------------------------------------------------------------
      */
-     sendMessage = (req,res) => {
+    sendMessage = (req, res) => {
         try {
             return SuccessResponse(res, 'data fetched successfully', []);
         } catch (error) {

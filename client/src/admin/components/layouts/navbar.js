@@ -7,20 +7,20 @@ const Navbar = () => {
 	const navigate = useNavigate();
 	const [userData, setUserData] = useState({
 		username: "",
-		name : ""
+		name: ""
 	});
 	function logout(e) {
 		e.preventDefault();
 		localStorage.removeItem('authtoken', "")
 		navigate('/login');
 	}
-	
+
 	async function getLoggedInUser() {
 		const res = await ApiCall('/api/v1/fetch-profile');
 		setUserData({
 			name: res.response.name,
-			username : res.response.username,
-			image : ""
+			username: res.response.username,
+			image: ""
 		});
 		// console.log(res.response.name);
 	}
@@ -30,13 +30,13 @@ const Navbar = () => {
 		getLoggedInUser();
 
 	}, [
-		
+
 	])
 	return (
 		<>
 			<div id="header" className="header navbar-default">
 				<div className="navbar-header">
-					<a href="index.html" className="navbar-brand"><span className="navbar-logo"><i className="ion-ios-cloud"></i></span> <b className="mr-1">React </b> Application</a>
+					<a href="index.html" className="navbar-brand"><span className="navbar-logo"><i className="ion-ios-cloud"></i></span> <b className="mr-1">React </b>Chat Application</a>
 					<button type="button" className="navbar-toggle" data-click="sidebar-toggled">
 						<span className="icon-bar"></span>
 						<span className="icon-bar"></span>
@@ -70,7 +70,7 @@ const Navbar = () => {
 							<div className="image image-icon bg-black text-grey-darker">
 								<i className="fa fa-user"></i>
 							</div>
-							<span className="d-none d-md-inline">{ userData.username } </span> <b className="caret"></b>
+							<span className="d-none d-md-inline">{userData.username} </span> <b className="caret"></b>
 						</a>
 						<div className="dropdown-menu dropdown-menu-right">
 							{/* <a href="#" className="dropdown-item">Edit Profile</a>

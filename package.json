@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "nodemon server.js",
+  "private": true,
   "scripts": {
     "start": "npm run dev ",
     "client": "npm start --prefix client",

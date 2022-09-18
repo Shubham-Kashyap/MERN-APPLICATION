@@ -32,6 +32,7 @@ const ChatRoom = (props) => {
     const [lastPong, setLastPong] = useState(null)
     const [loggedInUserData, setLoggedInUserData] = useState({});
     const [messageHistory, setMessageHistory] = useState([]);
+    const [Activechats, setActivechats] = useState([]);
     /**
      * ----------------------------------------------------------------
      * Custom functions
@@ -46,7 +47,8 @@ const ChatRoom = (props) => {
         const res = await post_api_call('/admin/v1/fetch-chat-users', {});
         setPeopleGroup(res.response);
     }
-    console.log(peopleList);
+    console.log('chat room list ---', peopleList);
+
     /**
     * ----------------------------------------------------------------
     * send message click handler

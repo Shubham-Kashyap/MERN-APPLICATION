@@ -1,7 +1,10 @@
 const { ErrorResponse, SuccessResponse } = require('../../utils/Response');
 const user = require('../../models/user');
 const chatGroupManagement = require('../../models/group');
+const chat = require('../../models/group');
 let _request;
+
+
 class AdminController {
   // greetings
   async greetings(req, res) {
@@ -54,7 +57,7 @@ class AdminController {
         }
       }).populate('users', '-password')
       // .populate('latestMessage');
-      console.log(req.user)
+      // console.log(req.user)
       return SuccessResponse(res, "data fetched successfully,", result);
     } catch (error) {
       return ErrorResponse(res, error.message)

@@ -10,6 +10,8 @@ const { check, validationResult } = require('express-validator');
 
 /* -- Controllers initialization start -- */
 const AdminController = require('../controllers/admin/AdminController');
+const ChatController = require('../controllers/chat/ChatController');
+
 /* -- Controller initialization end  -- */
 
 admin.get(`/greetings`, AdminController.greetings);
@@ -31,6 +33,7 @@ admin.all("*", (req, res, next) => {
         admin.post(`/add-user-to-group`, authenticateToken, AdminController.createChatGroupForUsers);
         admin.post(`/fetch-chat-users`, authenticateToken, AdminController.fetchChatGroupForUsers);
         admin.post(`/update-user-to-group`, authenticateToken, AdminController.updateChatGroupForUsers);
+        admin.post(`/get-chat-history`, authenticateToken, ChatController.getChatHostory);
 
         next();
     })

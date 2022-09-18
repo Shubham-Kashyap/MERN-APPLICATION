@@ -1,7 +1,7 @@
 import React from 'react';
 import { post_api_call } from '../../../../helpers/api_calls';
 
-const PeopleList = (props) => {
+const PeopleList = () => {
 
     const [peopleList, setPeopleList] = React.useState();
     const [individualChats, setIndividualChats] = React.useState();
@@ -43,11 +43,7 @@ const PeopleList = (props) => {
      */
     const getPeopleList = async () => {
         const data = await post_api_call('/admin/v1/fetch-chat-users', {});
-
-        // if (data.response.length > 0) {
-        //     setTab(data.response[0])
-        // }    
-        data && data.map((item, index) => {
+        data?.response?.map((item, index) => {
             if (item.is_group_chat === null || item.is_group_chat === false) {
                 setIndividualChats(...individualChats, item);
             } else {
@@ -55,6 +51,12 @@ const PeopleList = (props) => {
             }
         });
         console.log('get people list --', data.response);
+        setPeopleList(data.response);
+    }
+    const getPeopleList2 = async () => {
+        const data = await post_api_call('/admin/v1/fetch-user-list', {});
+        // console.log('++++ people list ++++++++ ', data);
+
         setPeopleList(data.response);
     }
     /**
@@ -81,18 +83,18 @@ const PeopleList = (props) => {
                 People
 
                 {
-                    individualChats && individualChats.map((item, index) => {
+                    // individualChats?.map((item, index) => {
 
-                        return (
-                            <li key={item._id} className="clearfix" data-tab-name={item.name} data-tab-timestamp={item.updatedAt} data-tab-avatar={item.avatar} style={{ cursor: 'pointer' }} onClick={onTabChange}>
-                                <img src={item.avatar ? item.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
-                                <div className="about">
-                                    <div className="name">{item.name ? item.name : "no name"}</div>
-                                    <div className="status"> <i className="fa fa-circle online"></i> online </div>
-                                </div>
-                            </li>
-                        )
-                    })
+                    // return (
+                    <li className="clearfix" style={{ cursor: 'pointer' }} onClick={onTabChange}>
+                        <img src={"https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
+                        <div className="about">
+                            <div className="name">{"no name adssa   "}</div>
+                            <div className="status"> <i className="fa fa-circle online"></i> online </div>
+                        </div>
+                    </li>
+                    // )
+                    // })
                 }
 
 
@@ -110,7 +112,7 @@ const PeopleList = (props) => {
                 Groups
 
                 {
-                    groupChats && groupChats.map((item, index) => {
+                    groupChats?.map((item, index) => {
 
                         return (
                             <li key={item._id} className="clearfix " data-tab-name={item.name} data-tab-timestamp={item.updatedAt} data-tab-avatar={item.avatar} style={{ cursor: 'pointer' }} onClick={onTabChange}>
@@ -131,8 +133,8 @@ const PeopleList = (props) => {
 
     React.useEffect(() => {
         getPeopleList();
-        window.tabData = currentTabData;
-    }, [])
+        getPeopleList2();
+    }, [individualChats, groupChats])
 
 
     return (
@@ -147,9 +149,9 @@ const PeopleList = (props) => {
                 </div>
 
 
-                {/* group / one-to-one chat list */}
-                {_groupChatList()}
-                {/* group / one-to-one chat list */}
+                {/* group / many-to-one chat list */}
+                {/* {_groupChatList()} */}
+                {/* group / many-to-one chat list */}
 
 
                 {/* Individual / one-to-one chat list */}

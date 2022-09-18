@@ -10,7 +10,7 @@ const WelcomeMessage = () => {
                     <div className="message-data text-center">
                         {/* <span className="message-data-time">10:10 AM, Today</span> */}
                         <img src="https://bootdey.com/img/Content/avatar/avatar7.png" style={{ marginRight: '5px' }} alt="avatar" />
-                        <div className="message other-message"> Hi welcome to react chat application  </div>
+                        <div className="message other-message text-center"> Hi welcome to react chat application . Please select individual from chat section or search a user to begin chat </div>
 
                     </div>
                 </li>
