@@ -1,6 +1,7 @@
 const { body, check, validationResult } = require('express-validator');
 const { ErrorResponse, SuccessResponse } = require('../utils/Response');
 const { user } = require('../exports/library');
+const User = require('../models/user');
 
 const validate = (method) => {
     switch (method) {
@@ -47,7 +48,7 @@ const validate = (method) => {
             ];
         }
         case "add-user-to-group": {
-            console.log('- add to chat group')
+            console.log('- add to chat group');
             return [
                 check('user').trim()
                     .not().isEmpty().withMessage("user cant be empty").bail()
@@ -65,6 +66,21 @@ const validate = (method) => {
                         }
                     }).bail(),
             ]
+        }
+        case "add-user-to-group": {
+            console.log('- add user to group');
+            return [
+                check('is_group_chat').trim()
+                    .not().isEmpty().withMessage('is_group_chat status is required in boolean form').bail(),
+                check('userId').withMessage('UserId field is required').bail()
+                    .custom(async (value) => {
+                        const data = await User.findOne({ _id: value });
+                        if (!data) {
+                            return Promise.reject("User not exists")
+                        }
+                    }).bail(),
+
+            ];
         }
         default: {
             return []

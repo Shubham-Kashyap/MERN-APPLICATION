@@ -54,7 +54,8 @@ const AdminApp = () => {
         {/* <Route  element={isAuthenticated ? <Outlet /> : <Navigate to="/login" />}> */}
         <Route element={<ProtectRoutes />}>
 
-          <Route path="/home" element={<Home />} />
+          {/* <Route path="/home" element={<Home />} /> */}
+          <Route path="/home" element={<ChatRoom />} />
           <Route path="/dashboard" element={<ChatRoom />} />
           <Route path="/profile-settings" element={<Profile />} />
           <Route path="/chat-section" element={<ChatRoom />} />

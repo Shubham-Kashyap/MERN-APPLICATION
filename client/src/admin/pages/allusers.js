@@ -3,7 +3,7 @@ import React from 'react'
 
 
 
-const allusers = () => {
+const AllUsers = () => {
     const [users, setusers] = useState([]);
 
 
@@ -17,4 +17,4 @@ const allusers = () => {
     )
 }
 
-export default allusers
+export default AllUsers

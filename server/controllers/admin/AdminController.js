@@ -34,15 +34,31 @@ class AdminController {
   async createChatGroupForUsers(req, res) {
     try {
       _request = await req.body;
-      const result = await chatGroupManagement.create({
-        name: _request.name,
-        users: _request.user,
-        owner: _request.owner,
-        mute_status: _request.country_code,
-        is_group_chat: _request.is_group_chat,
-        avatar: _request.avatar,
-      });
-      return SuccessResponse(res, "data added successfully,", result);
+      // 
+
+      switch (_request.is_group_chat) {
+        case false: {
+          const alreadyExists = await chatGroupManagement.findOne({
+            $and: [
+              { $users: { $in: [_request.userId] } }, // should have one user to be a user you are sending request to 
+              { $users: { $in: [req.user._id] } }, // should have one user to be a logged in user
+              { is_group_chat: false }, // represents one to one individual chat 
+            ]
+          })
+        }
+        default: {
+          const result = await chatGroupManagement.create({
+            name: _request.name,
+            users: _request.user,
+            owner: _request.owner,
+            mute_status: _request.country_code,
+            is_group_chat: _request.is_group_chat,
+            avatar: _request.avatar,
+          });
+          return SuccessResponse(res, "data added successfully,", result);
+        }
+      }
+
     } catch (error) {
       return ErrorResponse(res, error.message)
     }
@@ -53,7 +69,7 @@ class AdminController {
 
       const result = await chatGroupManagement.find({
         users: {
-          $in: [_request.user]
+          $in: [req.user._id]
         }
       }).populate('users', '-password')
       // .populate('latestMessage');
