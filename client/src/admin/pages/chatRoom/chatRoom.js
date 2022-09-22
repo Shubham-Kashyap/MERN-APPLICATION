@@ -5,6 +5,7 @@ import { post_api_call, ApiCall } from "../../../helpers/api_calls";
 import PeopleList from './components/peoplelist';
 import ChatHistory from './components/chatHistory';
 import ChatHeader from './components/chatHeader';
+import { enableMessaging } from './components/peoplelist';
 
 const URL = "http://localhost:4000";
 const socket = io(URL, {
