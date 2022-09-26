@@ -100,7 +100,8 @@
 .chat .chat-header {
     padding: 15px 20px;
     margin-left: 10px;
-    border-bottom: 2px solid #f4f7f6
+    border-bottom: 2px solid #f4f7f6;
+    border-radius : 10px;
 }
 
 .chat .chat-header img {
@@ -117,7 +118,8 @@
 }
 .chat .chat-header .chat-about {
     float: left;
-    padding-left: 10px
+    padding-left: 10px;
+    padding-top:5px;
 }
 
 .chat .chat-history {

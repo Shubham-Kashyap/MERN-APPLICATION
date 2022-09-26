@@ -2,13 +2,15 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { post_api_call } from '../../helpers/api_calls';
 import { useNavigate, Outlet, Navigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
 
-const Signup = () => {
+const Login = () => {
     /**
      * ----------------------------------------------------------------
      * State valiables 
      * ----------------------------------------------------------------
      */
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [alertContent, setAlertContent] = useState({});
@@ -39,6 +41,10 @@ const Signup = () => {
             localStorage.setItem('authtoken', response.response.token.personal_access_token);
             console.log('current authtoken ', localStorage.getItem('authtoken'));
             console.log('navigate to dashboard')
+            dispatch({
+                type: 'updateLoggedInUserData',
+                payload: response.response,
+            })
             navigate('/home');
         }
         else if (response && response.status === false) {
@@ -92,7 +98,7 @@ const Signup = () => {
             {/* <!-- end login-cover --> */}
 
             {/* <!-- begin #page-container --> */}
-            <div id="page-container" className="fade" style={{ zIndex: 'auto' }}>
+            <div id="page-container" className="show" >
                 {/* <!-- begin login --> */}
                 {/* <div className="login login-v2" data-pageload-addclassName="animated fadeIn"> */}
                 <div className="login login-v2" >
@@ -142,7 +148,7 @@ const Signup = () => {
                                 >Sign me in</button>
                             </div>
                             <div className="m-t-20">
-                                Not registered yet? Click <a style={{ cursor: "pointer" }} href={clickHere}>here</a> to register.
+                                Not registered yet? Click <a style={{ cursor: "pointer" }} onClick={clickHere}>here</a> to register.
                             </div>
                         </form>
                     </div>
@@ -156,4 +162,4 @@ const Signup = () => {
     );
 }
 
-export default Signup;
+export default Login;

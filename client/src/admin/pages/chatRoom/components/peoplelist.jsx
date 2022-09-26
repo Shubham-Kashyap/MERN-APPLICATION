@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { post_api_call } from '../../../../helpers/api_calls';
 
 const PeopleList = () => {
@@ -8,7 +9,10 @@ const PeopleList = () => {
     const [showSearchList, setShowSearchListStatus] = React.useState(false);
     const [filteredList, setFilteredList] = React.useState([]);
     const [enableMessaging, setEnableMessaging] = React.useState(false);
-
+    const [individualList, setIndividualList] = React.useState([]);
+    const [showFilteredlist, setShowFilteredList] = React.useState(false);
+    const loggedInUserData = useSelector(state => state.loggedInUserData);
+    const dispatch = useDispatch();
     /**
      * --------------------------------------------------------------------------------------
      * Filter search
@@ -17,18 +21,22 @@ const PeopleList = () => {
     const filterSearch = (e) => {
         const keyword = e.target.value;
         // setShowSearchListStatus(true);
-        var updatedList = [...peopleList];
+        // var updatedList = [...peopleList]; // to apply the search on chat people list
+        var updatedList = [...individualList] // to apply search filter on registered individuals
 
         if (keyword === "") {
             getPeopleList();
+            setShowFilteredList(false);
         }
         if (keyword !== "") {
+            setShowFilteredList(true);
             updatedList = updatedList.filter((user) => {
                 return user.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
             })
         }
-        // setFilteredList(updatedlist);
-        setPeopleList(updatedList);
+        console.log('updated list --++ ', updatedList);
+        setFilteredList(updatedList);
+        // setPeopleList(updatedList);
 
     }
 
@@ -58,7 +66,9 @@ const PeopleList = () => {
         const users = await post_api_call('/admin/v1/fetch-user-list', {});
         const data = await post_api_call('/admin/v1/fetch-chat-users', {});
         setPeopleList(data.response);
+        setIndividualList(users.response);
         console.log('people list --', peopleList);
+        console.log('loggedInUserData -- ', loggedInUserData);
     }
 
     /**
@@ -67,6 +77,10 @@ const PeopleList = () => {
      * -------------------------------------------------------------------------------------------
      */
     const onTabChange = (e) => {
+        dispatch({
+            type: "setMessaageBoxTabData",
+            payload: 'hello'
+        })
         setCurrentTabData({
             tabDataId: e.targe.getAttribute('key'),
             tabDataAvatar: e.target.getAttribute('data-tab-avatar'),
@@ -81,7 +95,7 @@ const PeopleList = () => {
      */
     const _individualChatList = () => {
         return (
-            <ul className="list-unstyled chat-list mt-2 mb-0" id="people-listing">
+            <div>
                 People
 
                 {
@@ -101,7 +115,7 @@ const PeopleList = () => {
                     })
                 }
 
-            </ul>
+            </div>
         );
 
 
@@ -113,7 +127,7 @@ const PeopleList = () => {
      */
     const _groupChatList = (item) => {
         return (
-            <ul className="list-unstyled chat-list mt-2 mb-0" id="people-listing">
+            <div >
                 Groups
 
                 {
@@ -134,10 +148,39 @@ const PeopleList = () => {
                 }
 
 
-            </ul>
+            </div>
         )
 
 
+    }
+    const _filteredChatList = () => {
+        if (showFilteredlist === false) {
+            return null;
+        }
+        return (
+            <div >
+                {/* {filteredList.length > 1 ? "Search Results " : null} */}
+                Search Results :z
+                {
+                    filteredList?.map((item, index) => {
+
+                        return (
+                            <li key={item._id} className="clearfix " data-tab-name={item.name} data-tab-timestamp={item.updatedAt} data-tab-avatar={item.avatar} style={{ cursor: 'pointer' }} onClick={onTabChange}>
+                                <img src={item.avatar ? item.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
+                                <div className="about">
+                                    <div className="name">{item.name ? item.name : "no group name"}</div>
+                                    <div className="status"> <i className="fa fa-circle online"></i> online </div>
+                                </div>
+                            </li>
+                        )
+
+
+                    })
+                }
+
+
+            </div>
+        );
     }
 
     React.useEffect(() => {
@@ -157,16 +200,23 @@ const PeopleList = () => {
                     </div>
                     <input type="text" className="form-control" placeholder="Search..." onChange={filterSearch} />
                 </div>
+                <ul className="list-unstyled chat-list mt-2 mb-0" id="people-listing">
+                    {/* group / many-to-one chat list */}
+                    {_filteredChatList()}
+                    {/* group / many-to-one chat list */}
+
+                    {/* group / many-to-one chat list */}
+                    {_groupChatList()}
+                    {/* group / many-to-one chat list */}
 
 
-                {/* group / many-to-one chat list */}
-                {_groupChatList()}
-                {/* group / many-to-one chat list */}
+                    {/* Individual / one-to-one chat list */}
+                    {_individualChatList()}
+                    {/* Individual / one-to-one chat list */}
+
+                </ul>
 
 
-                {/* Individual / one-to-one chat list */}
-                {_individualChatList()}
-                {/* Individual / one-to-one chat list */}
             </div>
             {/* people list end  */}
         </>

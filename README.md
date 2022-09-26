@@ -1,7 +1,7 @@
 # MERN-APPLICATION
 This is mern application version 2 including chat functionality using **socket.io** & **ReactJS** 
 
-Hi, my name is **shubham kashyap** , I have created this project to learn & implement new things in MERN statck environment !
+Hi, my name is **shubham kashyap** , I have created this project to learn & implement new things like react-redux in MERN statck environment !
 my main goal is to help other developers like me to build , create and deploy their application faster whithout loosing the confidence in development process
 
 
