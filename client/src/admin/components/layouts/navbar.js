@@ -18,8 +18,8 @@ const Navbar = () => {
 	async function getLoggedInUser() {
 		const res = await ApiCall('/api/v1/fetch-profile');
 		setUserData({
-			name: res.response.name,
-			username: res.response.username,
+			name: res?.response?.name,
+			username: res?.response?.username,
 			image: ""
 		});
 		// console.log(res.response.name);

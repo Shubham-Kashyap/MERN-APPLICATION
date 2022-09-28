@@ -1,46 +1,55 @@
- import React from "react";
- import { useState, useEffect } from 'react';
- import { ApiCall } from '../../helpers/api_calls';
- import { useNavigate, Outlet, Navigate } from "react-router-dom";
+import React from "react";
+import { useState, useEffect } from 'react';
+import { ApiCall } from '../../helpers/api_calls';
+import { useNavigate, Outlet, Navigate } from "react-router-dom";
 
 const Profile = () => {
-    
+
     const navigate = useNavigate();
-	const [userData, setUserData] = useState({
-		username: "",
-		name : ""
+    const [userData, setUserData] = useState({
+        username: "",
+        name: ""
     });
     const [userDataChangedValues, setUserDataChangedValues] = useState(userData);
-	
-	
-	async function getLoggedInUser() {
-		const res = await ApiCall('/api/v1/fetch-profile');
-		setUserData({
-			name: res.response.name,
-			username : res.response.username,
-			image : ""
-		});
-		setUserDataChangedValues({
-			name: res.response.name,
-			username : res.response.username,
-			image : ""
-		});
-		// console.log(res.response.name);
-	}
 
-    const onValueChange = (e) => {
+
+    async function getLoggedInUser() {
+        const res = await ApiCall('/api/v1/fetch-profile');
+        setUserData({
+            name: res?.response?.name,
+            username: res?.response?.username,
+            image: ""
+        });
+        setUserDataChangedValues({
+            name: res?.response?.name,
+            username: res?.response?.username,
+            avatar: res?.response?.avatar,
+            country_code: res?.response?.country_code,
+            phone_number: res?.response?.phone_no,
+        });
+        // console.log(res.response.name);
+    }
+
+    const onInputChange = (e) => {
         e.preventDefault();
-        const value = e.target.value;
-        const attributeName = e.target.getAttribute('name');
-        
-        setUserDataChangedValues(attributeName ,{
-            ...userDataChangedValues, attributeName: e.target.value
+        const atributeValue = e.target.value;
+        const attributeName = e.target.name
+
+        setUserDataChangedValues({
+            ...userDataChangedValues, [attributeName]: atributeValue
         })
-        
+        console.log('on values change ---', userDataChangedValues);
     };
-    const updateUserData = (e) => {
+
+
+    const updateProfile = (e) => {
         e.preventDefault();
-        setUserData(...userData , userDataChangedValues)
+        // setUserData
+        console.log('udpated  values -- ', userDataChangedValues);
+
+    }
+    const friends = () => {
+
     }
 
 
@@ -49,16 +58,16 @@ const Profile = () => {
      * Effect onload component
      * ----------------------------------------------------------------
      */
-	useEffect(() => {
-		// logout();
-		getLoggedInUser();
+    useEffect(() => {
+        // logout();
+        getLoggedInUser();
 
-	}, [
-		
-	])
+    }, [
+
+    ])
     return (
         <>
-            
+
             <div id="content" className="content content-full-width">
                 {/* <!--   begin profile --> */}
                 <div className="profile">
@@ -70,12 +79,12 @@ const Profile = () => {
                         <div className="profile-header-content">
                             {/* <!--   BEGIN profile-header-img --> */}
                             <div className="profile-header-img">
-                                <img src="/assets/img/user/user-13.jpg" alt="" />
+                                <img src={userDataChangedValues.avatar ? userDataChangedValues.avatar : ""} alt="" />
                             </div>
                             {/* <!--   END profile-header-img --> */}
                             {/* <!--   BEGIN profile-header-info --> */}
                             <div className="profile-header-info">
-                                <h4 className="mt-0 mb-1">{userData.username }</h4>
+                                <h4 className="mt-0 mb-1">{userData.username}</h4>
                                 <p className="mb-2">Full stack Developer</p>
                                 <a href="#" className="btn btn-xs btn-yellow">Edit Profile</a>
                             </div>
@@ -86,7 +95,7 @@ const Profile = () => {
                         <ul className="profile-header-tab nav nav-tabs">
 
                             <li className="nav-item"><a href="#profile-about" className="nav-link active" data-toggle="tab">ABOUT</a></li>
-                            <li className="nav-item"><a href="#profile-videos" className="nav-link" data-toggle="tab">VIDEOS</a></li>
+                            {/* <li className="nav-item"><a href="#profile-videos" className="nav-link" data-toggle="tab">VIDEOS</a></li> */}
                             <li className="nav-item"><a href="#profile-friends" className="nav-link" data-toggle="tab">FRIENDS</a></li>
                         </ul>
                         {/* <!--   END profile-header-tab --> */}
@@ -108,94 +117,75 @@ const Profile = () => {
                                     <thead>
                                         <tr>
                                             <th></th>
-    <th>
-                                                <h4> {userData.username} <small>{ userData.name }</small></h4>
-                                               </th>
+                                            <th>
+                                                <h4> {userData.username} <small>{userData.name}</small></h4>
+                                            </th>
                                         </tr>
                                     </thead>
-                                    <form></form>
+
                                     <tbody>
-                                        <tr className="highlight">
+                                        <tr className="">
                                             <td className="field">Username : </td>
-                                            {/* <td><a href="#">Add Mood Message</a></td> */}
+
                                             <td>
                                                 <div className="input">
 
                                                     <div className="input-group">
-                                                        <input type="text" className="form-control rounded-corner" name="username" placeholder="Enter username..." value={userDataChangedValues.username} onChange={ onValueChange } />
-                                                        
+                                                        <input type="text" className="form-control rounded-corner" name="username" placeholder="Enter username..." value={userDataChangedValues?.username} onChange={onInputChange} />
+
                                                     </div>
 
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr className="divider">
-                                            <td colSpan="2"></td>
-                                        </tr>
+
                                         <tr>
                                             <td className="field">Name : </td>
                                             <td>
                                                 <div className="input">
 
                                                     <div className="input-group">
-                                                        <input type="text" className="form-control rounded-corner" name="name" placeholder="Enter name..." value={userDataChangedValues.name} onChange={ onValueChange }  />
-                                                        
+                                                        <input type="text" className="form-control rounded-corner" name="name" placeholder="Enter name..." value={userDataChangedValues?.name} onChange={onInputChange} />
+
                                                     </div>
 
                                                 </div>
                                             </td>
                                         </tr>
-                                       
-                                        <tr className="divider">
-                                            <td colSpan="2"></td>
+                                        <tr>
+                                            <td className="field">Country Code : </td>
+                                            <td>
+                                                <div className="input">
+
+                                                    <div className="input-group">
+                                                        <input type="number" className="form-control rounded-corner" name="country_code" placeholder="Enter country code..." value={userDataChangedValues?.country_code} onChange={onInputChange} />
+
+                                                    </div>
+
+                                                </div>
+                                            </td>
                                         </tr>
-                                        {/* <tr>
-                                            <td className="field valign-middle">Country/Region</td>
-                                            <td className="with-form-control">
-                                                <select defaultValue={'1'} className="form-control form-control-sm" name="region">
-                                                    <option value="1" disabled>Choose a salutation ...</option>
-                                                    <option value="US" selected>United State</option>
-                                                    <option value="AF">Afghanistan</option>
-                                                    <option value="AL">Albania</option>
-                                                    <option value="DZ">Algeria</option>
-                                                    <option value="AS">American Samoa</option>
-                                                    <option value="AD">Andorra</option>
-                                                    <option value="AO">Angola</option>
-                                                    <option value="AI">Anguilla</option>
-                                                    <option value="AQ">Antarctica</option>
-                                                    <option value="AG">Antigua and Barbuda</option>
-                                                </select>
+                                        <tr>
+                                            <td className="field">Phone Number : </td>
+                                            <td>
+                                                <div className="input">
+
+                                                    <div className="input-group">
+                                                        <input type="number" className="form-control rounded-corner" name="phone_number" placeholder="Enter phone number..." value={userDataChangedValues?.phone_number} onChange={onInputChange} />
+
+                                                    </div>
+
+                                                </div>
                                             </td>
-                                        </tr> */}
-                                        
-                                        {/* <tr>
-                                            <td className="field valign-middle">Gender</td>
-                                            <td className="with-form-control">
-                                                <select defaultValue={'1'} className="form-control form-control-sm" name="gender">
-                                                    <option value="1" disabled>Choose a salutation ...</option>
-                                                    <option value="male">Male</option>
-                                                    <option value="female">Female</option>
-                                                </select>
-                                            </td>
-                                        </tr> */}
-                                       
-                                        {/* <tr>
-                                            <td className="field valign-middle">Language</td>
-                                            <td className="with-form-control">
-                                                <select defaultValue={'1'} className="form-control form-control-sm" name="language">
-                                                    <option value="1" disabled>Choose a salutation ...</option>
-                                                    <option value="" selected>English</option>
-                                                </select>
-                                            </td>
-                                        </tr> */}
-                                        <tr className="divider">
-                                            <td colSpan="2"></td>
                                         </tr>
-                                        <tr className="highlight">
+
+
+
+                                        <tr className="">
                                             <td className="field">&nbsp;</td>
                                             <td className="p-t-10 p-b-10">
-                                                <button type="submit" className="btn btn-primary width-150">Update</button>
-                                                <button type="submit" className="btn btn-white btn-white-without-border width-150 m-l-5">Cancel</button>
+                                                <button type="submit" onClick={updateProfile} className="btn btn-primary width-150">Update</button>
+                                                {/* <button type="submit" className="btn btn-white btn-white-without-border width-150 m-l-5">Cancel</button> */}
                                             </td>
                                         </tr>
                                     </tbody>

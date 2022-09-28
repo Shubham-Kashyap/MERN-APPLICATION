@@ -66,12 +66,19 @@ class AdminController {
   async fetchChatGroupForUsers(req, res) {
     try {
       _request = await req.body;
-
       const result = await chatGroupManagement.find({
         users: {
           $in: [req.user._id]
         }
-      }).populate('users', '-password')
+      })
+      // .populate({
+      //   path: 'id',
+      //   populate: {
+      //     path: 'user_id',
+      //     model: 'personal_access_tokens'
+      //   }
+      // });
+      // .populate('users', '-password')
       // .populate('latestMessage');
       // console.log(req.user)
       return SuccessResponse(res, "data fetched successfully,", result);
