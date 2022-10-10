@@ -10,10 +10,10 @@ const OtherIcons = () => {
 }
 
 
-const ChatHeader = ({ tab }) => {
-    const avatar = tab && tab.avatar ? tab.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png";
-    const name = tab && tab.name ? tab.name : 'Random user';
-    const lastSeen = tab && tab.lastSeen ? tab.lastSeen : "Last seen: 2 hours ago";
+const _showContent = (tab) => {
+    const avatar = tab && tab?.avatar ? tab?.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png";
+    const name = tab && tab?.name ? tab?.name : 'Random user';
+    const lastSeen = tab && tab?.lastSeen ? tab?.lastSeen : "Last seen: 2 hours ago";
     return (
         <div className="chat-header clearfix bg-gradient-teal">
             <div className="row " >
@@ -29,6 +29,23 @@ const ChatHeader = ({ tab }) => {
 
             </div>
         </div>
+    );
+}
+const _hideContent = () => {
+    return (
+        <div className="none">
+
+        </div>
+    );
+}
+
+const ChatHeader = ({ tab }) => {
+
+    return (
+        <>
+            {tab ? _showContent(tab) : _hideContent()}
+        </>
+
     );
 }
 export default ChatHeader;

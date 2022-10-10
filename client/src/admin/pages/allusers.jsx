@@ -4,7 +4,7 @@ import React from 'react'
 
 
 const AllUsers = () => {
-    const [users, setusers] = useState([]);
+    const [users, setusers] = React.useState([]);
 
 
     const getAllUsers = () => {

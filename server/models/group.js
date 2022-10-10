@@ -7,11 +7,11 @@ const chatGroupManagementSchema = new mongoose.Schema({
     },
     users: [{
         type: mongoose.Schema.Types.ObjectId,
-        // ref: 'users'
+        ref: 'users'
     }],
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        // ref: users
+        ref: 'users'
     },
     is_group_chat: {
         type: String,

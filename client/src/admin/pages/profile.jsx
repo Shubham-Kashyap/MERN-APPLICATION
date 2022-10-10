@@ -1,11 +1,11 @@
-import React from "react";
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ApiCall } from '../../helpers/api_calls';
-import { useNavigate, Outlet, Navigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 const Profile = () => {
 
     const navigate = useNavigate();
+    let res = useSelector(state => state.authReducer.loggedInUser);
     const [userData, setUserData] = useState({
         username: "",
         name: ""
@@ -14,18 +14,18 @@ const Profile = () => {
 
 
     async function getLoggedInUser() {
-        const res = await ApiCall('/api/v1/fetch-profile');
+
         setUserData({
-            name: res?.response?.name,
-            username: res?.response?.username,
+            name: res?.name,
+            username: res?.username,
             image: ""
         });
         setUserDataChangedValues({
-            name: res?.response?.name,
-            username: res?.response?.username,
-            avatar: res?.response?.avatar,
-            country_code: res?.response?.country_code,
-            phone_number: res?.response?.phone_no,
+            name: res?.name,
+            username: res?.username,
+            avatar: res?.avatar,
+            country_code: res?.country_code,
+            phone_number: res?.phone_no,
         });
         // console.log(res.response.name);
     }
@@ -37,7 +37,7 @@ const Profile = () => {
 
         setUserDataChangedValues({
             ...userDataChangedValues, [attributeName]: atributeValue
-        })
+        });
         console.log('on values change ---', userDataChangedValues);
     };
 

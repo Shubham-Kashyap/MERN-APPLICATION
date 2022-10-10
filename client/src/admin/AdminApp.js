@@ -13,6 +13,7 @@ import $404 from "./components/errorpages/404";
 import Profile from './pages/profile';
 import Chat from "./pages/chat";
 import ChatRoom from "./pages/chatRoom/chatRoom";
+import Allusers from "./pages/allusers";
 
 const AdminApp = () => {
   /**
@@ -55,6 +56,7 @@ const AdminApp = () => {
         <Route element={<ProtectRoutes />}>
 
           {/* <Route path="/home" element={<Home />} /> */}
+          <Route path="/all-users" element={<Allusers />} />
           <Route path="/home" element={<ChatRoom />} />
           <Route path="/dashboard" element={<ChatRoom />} />
           <Route path="/profile-settings" element={<Profile />} />
@@ -64,7 +66,7 @@ const AdminApp = () => {
         <Route path='/*' element={<$404 />}></Route>
 
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 }
 

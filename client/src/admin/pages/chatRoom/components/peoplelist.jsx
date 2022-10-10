@@ -39,7 +39,12 @@ const PeopleList = () => {
         // setPeopleList(updatedList);
 
     }
-
+    async function setCurrentChat(item) {
+        dispatch({
+            type: "setCurrentChat",
+            payload: item
+        })
+    }
     /**
      * ------------------------------------------------------------------------------------------
      * add user to chat 
@@ -63,30 +68,29 @@ const PeopleList = () => {
      * ------------------------------------------------------------------------------------------
      */
     const getPeopleList = async () => {
-        const users = await post_api_call('/admin/v1/fetch-user-list', {});
+        // const users = await post_api_call('/admin/v1/fetch-user-list', {});
         const data = await post_api_call('/admin/v1/fetch-chat-users', {});
         setPeopleList(data.response);
-        setIndividualList(users.response);
+        // setIndividualList(users.response);
         console.log('people list --', peopleList);
-        console.log('loggedInUserData -- ', loggedInUserData);
+        // console.log('loggedInUserData -- ', loggedInUserData);
     }
-
+    const getIndividualList = async () => {
+        const users = await post_api_call('/admin/v1/fetch-user-list', {});
+        setIndividualList(users.response);
+    }
     /**
      * -------------------------------------------------------------------------------------------
      * On tab change
      * -------------------------------------------------------------------------------------------
      */
-    const onTabChange = (e) => {
-        dispatch({
-            type: "setMessaageBoxTabData",
-            payload: 'hello'
-        })
-        setCurrentTabData({
-            tabDataId: e.targe.getAttribute('key'),
-            tabDataAvatar: e.target.getAttribute('data-tab-avatar'),
-            tabDataTimestamp: e.target.getAttribute('data-tab-timestamp')
-        });
-    }
+    // const onTabChange = (e) => {
+    //     dispatch({
+    //         type: "setMessaageBoxTabData",
+    //         payload: 'hello123'
+    //     })
+
+    // }
 
     /**
      * ---------------------------------------------------------------------------------------------
@@ -102,7 +106,7 @@ const PeopleList = () => {
                     peopleList?.map((item, index) => {
                         if (item.is_group_chat === 'false') {
                             return (
-                                <li className="clearfix" key={item?._id} data-id={item?._id} onClick={addUserToChat} style={{ cursor: 'pointer' }} onClick={onTabChange}>
+                                <li className="clearfix" key={item?._id} data-id={item?._id} onClick={addUserToChat} style={{ cursor: 'pointer' }} onClick={(e) => setCurrentChat(item)}>
                                     <img src={item?.avatar ? item?.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
                                     <div className="about">
                                         <div className="name">{item.name ? item.name : "no individual name"}</div>
@@ -134,7 +138,7 @@ const PeopleList = () => {
                     peopleList?.map((item, index) => {
                         if (item.is_group_chat === 'true') {
                             return (
-                                <li key={item._id} className="clearfix " data-tab-name={item.name} data-tab-timestamp={item.updatedAt} data-tab-avatar={item.avatar} style={{ cursor: 'pointer' }} onClick={onTabChange}>
+                                <li key={item._id} className="clearfix " data-tab-name={item.name} data-tab-timestamp={item.updatedAt} data-tab-avatar={item.avatar} style={{ cursor: 'pointer' }} onClick={"hello"}>
                                     <img src={item.avatar ? item.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
                                     <div className="about">
                                         <div className="name">{item.name ? item.name : "no group name"}</div>
@@ -165,7 +169,7 @@ const PeopleList = () => {
                     filteredList?.map((item, index) => {
 
                         return (
-                            <li key={item._id} className="clearfix " data-tab-name={item.name} data-tab-timestamp={item.updatedAt} data-tab-avatar={item.avatar} style={{ cursor: 'pointer' }} onClick={onTabChange}>
+                            <li key={item._id} className="clearfix " data-tab-name={item.name} data-tab-timestamp={item.updatedAt} data-tab-avatar={item.avatar} style={{ cursor: 'pointer' }} onClick={dispatch({ type: "setCurrentChat", payload: item })}>
                                 <img src={item.avatar ? item.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
                                 <div className="about">
                                     <div className="name">{item.name ? item.name : "no group name"}</div>
@@ -185,6 +189,7 @@ const PeopleList = () => {
 
     React.useEffect(() => {
         getPeopleList();
+        getIndividualList();
         // getPeopleList2();
     }, []);
 

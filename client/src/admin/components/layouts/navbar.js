@@ -2,9 +2,11 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { ApiCall } from '../../../helpers/api_calls';
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
 	const navigate = useNavigate();
+	const res = useSelector(state => state.authReducer.loggedInUser);
 	const [userData, setUserData] = useState({
 		username: "",
 		name: ""
@@ -16,13 +18,17 @@ const Navbar = () => {
 	}
 
 	async function getLoggedInUser() {
-		const res = await ApiCall('/api/v1/fetch-profile');
-		setUserData({
-			name: res?.response?.name,
-			username: res?.response?.username,
-			image: ""
-		});
+		// const res = await ApiCall('/api/v1/fetch-profile');
+		// setUserData({
+		// 	name: res?.response?.name,
+		// 	username: res?.response?.username,
+		// 	image: ""
+		// });
+		// setUserData(res);
 		// console.log(res.response.name);
+
+		setUserData(res);
+
 	}
 
 	useEffect(() => {
@@ -30,7 +36,7 @@ const Navbar = () => {
 		getLoggedInUser();
 
 	}, [
-
+		res
 	])
 	return (
 		<>
@@ -70,7 +76,7 @@ const Navbar = () => {
 							<div className="image image-icon bg-black text-grey-darker">
 								<i className="fa fa-user"></i>
 							</div>
-							<span className="d-none d-md-inline">{userData.username} </span> <b className="caret"></b>
+							<span className="d-none d-md-inline">{userData?.username} </span> <b className="caret"></b>
 						</a>
 						<div className="dropdown-menu dropdown-menu-right">
 							{/* <a href="#" className="dropdown-item">Edit Profile</a>
