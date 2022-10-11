@@ -1,17 +1,19 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { post_api_call } from '../../../../helpers/api_calls';
+import CreateGroup from '../../../components/modals/createGroup';
 
 const PeopleList = () => {
 
     const [peopleList, setPeopleList] = React.useState();
-    const [currentTabData, setCurrentTabData] = React.useState({});
-    const [showSearchList, setShowSearchListStatus] = React.useState(false);
+    // const [currentTabData, setCurrentTabData] = React.useState({});
+    // const [showSearchList, setShowSearchListStatus] = React.useState(false);
     const [filteredList, setFilteredList] = React.useState([]);
     const [enableMessaging, setEnableMessaging] = React.useState(false);
     const [individualList, setIndividualList] = React.useState([]);
     const [showFilteredlist, setShowFilteredList] = React.useState(false);
     const loggedInUserData = useSelector(state => state.loggedInUserData);
+    const [showModal, setShowModal] = React.useState(false);
     const dispatch = useDispatch();
     /**
      * --------------------------------------------------------------------------------------
@@ -106,7 +108,7 @@ const PeopleList = () => {
                     peopleList?.map((item, index) => {
                         if (item.is_group_chat === 'false') {
                             return (
-                                <li className="clearfix" key={item?._id} data-id={item?._id} onClick={addUserToChat} style={{ cursor: 'pointer' }} onClick={(e) => setCurrentChat(item)}>
+                                <li className="clearfix" key={item?._id} data-id={item?._id} style={{ cursor: 'pointer' }} onClick={(e) => setCurrentChat(item)}>
                                     <img src={item?.avatar ? item?.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
                                     <div className="about">
                                         <div className="name">{item.name ? item.name : "no individual name"}</div>
@@ -138,7 +140,7 @@ const PeopleList = () => {
                     peopleList?.map((item, index) => {
                         if (item.is_group_chat === 'true') {
                             return (
-                                <li key={item._id} className="clearfix " data-tab-name={item.name} data-tab-timestamp={item.updatedAt} data-tab-avatar={item.avatar} style={{ cursor: 'pointer' }} onClick={"hello"}>
+                                <li key={item._id} className="clearfix " data-tab-name={item.name} data-tab-timestamp={item.updatedAt} data-tab-avatar={item.avatar} style={{ cursor: 'pointer' }} onClick={(e) => setCurrentChat(item)}>
                                     <img src={item.avatar ? item.avatar : "https://bootdey.com/img/Content/avatar/avatar2.png"} alt="avatar" />
                                     <div className="about">
                                         <div className="name">{item.name ? item.name : "no group name"}</div>
@@ -164,7 +166,7 @@ const PeopleList = () => {
         return (
             <div >
                 {/* {filteredList.length > 1 ? "Search Results " : null} */}
-                Search Results :z
+                Search Results :
                 {
                     filteredList?.map((item, index) => {
 
@@ -204,6 +206,12 @@ const PeopleList = () => {
                         <span className="input-group-text"><i className="fa fa-search"></i></span>
                     </div>
                     <input type="text" className="form-control" placeholder="Search..." onChange={filterSearch} />
+                    <div className="input-group-prepend" style={{ cursor: "pointer" }} onClick={(e) => setShowModal(true)}>
+                        <span className="input-group-text"><i className="fa fa-group"></i></span>
+                    </div>
+                    {
+                        <CreateGroup show={showModal} individualList={individualList} onHide={(e) => setShowModal(false)} />
+                    }
                 </div>
                 <ul className="list-unstyled chat-list mt-2 mb-0" id="people-listing">
                     {/* group / many-to-one chat list */}
