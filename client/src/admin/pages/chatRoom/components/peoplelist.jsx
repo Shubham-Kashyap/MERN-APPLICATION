@@ -210,7 +210,7 @@ const PeopleList = () => {
                         <span className="input-group-text"><i className="fa fa-group"></i></span>
                     </div>
                     {
-                        <CreateGroup show={showModal} individualList={individualList} onHide={(e) => setShowModal(false)} />
+                        <CreateGroup show={showModal} individualData={individualList} onHide={(e) => setShowModal(false)} />
                     }
                 </div>
                 <ul className="list-unstyled chat-list mt-2 mb-0" id="people-listing">

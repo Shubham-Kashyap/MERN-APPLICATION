@@ -27,7 +27,7 @@ export default function () {
     const dispatch = useDispatch();
     async function getLoggedInUserData() {
         const res = await ApiCall('/api/v1/fetch-profile');
-        console.log('sjdasjkdas dskadna ', res)
+        console.log('sjdasjkdas dskadna --s', res)
         dispatch({
             type: "setLoggedInUserData",
             payload: res?.response
